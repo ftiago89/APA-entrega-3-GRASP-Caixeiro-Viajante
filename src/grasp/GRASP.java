@@ -1,8 +1,13 @@
 
 package grasp;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Aresta;
 import model.Grafo;
 import model.Vertice;
@@ -20,28 +25,30 @@ public class GRASP {
     
     //GRASP
     public void run(){
+        
+        
         int[] solucao = new int[G.getnVertices()];
         int[] solucaoAux = new int[G.getnVertices()];
         double melhorValor = Double.MAX_VALUE;
         
         for (int i = 0; i < graspMax; ++i){
             //o alfa pode ser definido aqui
-            solucaoAux = new VND(G, construirSolucao(1, 0.2)).run();
+            solucaoAux = new VND(G, construirSolucao(1, 0.1)).run();
             //visualização
-            System.out.print("Rota intermediaria => ");
-            escreverArray(solucaoAux);
-            System.out.print(" Valor da solucao => ");
-            System.out.println(valorSolucao(solucaoAux));
+            //System.out.print("Rota intermediaria => ");
+            //escreverArray(solucaoAux);
+            //System.out.print(" Valor da solucao => ");
+            //System.out.println(valorSolucao(solucaoAux));
             ////////////////////////////////////////////
             if (valorSolucao(solucaoAux) < melhorValor)
-                solucao = solucaoAux;
-                melhorValor = valorSolucao(solucao);
+                melhorValor = valorSolucao(solucaoAux);
+                solucao = solucaoAux; 
         }
         //visualização
-        System.out.println("Rota encontrada => ");
+        System.out.print("Rota encontrada => ");
         escreverArray(solucao);
         System.out.print(" Valor da solucao => ");
-        System.out.print(valorSolucao(solucao));
+        System.out.println(valorSolucao(solucao));
         ///////////////////////////////////////////////
     }
     

@@ -15,19 +15,20 @@ public class VND {
     }
     
     public int[] run(){
-        int[] melhorVizinho;
+        int[] melhorVizinho = this.solucaoConstruida;
+        int[] solucaoTemp;
         int r = 2;
         int k = 1;
         
         while (k <= r){
             if (k == 1){
-                melhorVizinho = explorarSwap(this.solucaoConstruida);
+                solucaoTemp = explorarSwap(melhorVizinho);
             }else{
-                melhorVizinho = explorarDoisOpt(this.solucaoConstruida);
+                solucaoTemp = explorarDoisOpt(melhorVizinho);
             }
             
-            if (valorSolucao(melhorVizinho) < valorSolucao(this.solucaoConstruida)){
-                this.solucaoConstruida = melhorVizinho;
+            if (valorSolucao(solucaoTemp) < valorSolucao(melhorVizinho)){
+                melhorVizinho = solucaoTemp;
                 k = 1;
             }else{
                 ++k;
@@ -37,7 +38,7 @@ public class VND {
         //escreverArray(this.solucaoConstruida);
         //System.out.print(" Valor da solucao => ");
         //System.out.print(valorSolucao(this.solucaoConstruida));
-        return this.solucaoConstruida;
+        return melhorVizinho;
     }
     
     //////////////// funcao objetivo ///////////////////
@@ -53,23 +54,31 @@ public class VND {
     }
     //////////////// exploracao da vizinhança ///////////////
     private int[] explorarSwap(int[] s){
-        int[] melhorVizinho = new int[s.length];
+        int[] melhorVizinho = s;
         int[] sAux;
-        double melhorSolucao = Double.MAX_VALUE;
+        double melhorSolucao = valorSolucao(s);
+        double solucaoTemp;
+        int melhorVizinhoc = 0;
+        int melhorVizinhok = 0;
         
         for (int c = 0; c < s.length; ++c){
             for (int k = c+1; k < s.length; ++k){
+                //solucaoTemp = swapVirtual(c, k, s);
                 sAux = swap(c, k, s);
                 //System.out.print("Vizinho => ");
                 //escreverArray(sAux);
                 //System.out.println(" => " + valorSolucao(sAux));
                 if (valorSolucao(sAux) < melhorSolucao){
+                    //melhorSolucao = solucaoTemp;
+                    //melhorVizinhoc = c;
+                    //melhorVizinhok = k;
                     melhorSolucao = valorSolucao(sAux);
                     melhorVizinho = sAux;
                 }
             }
         }
-        //System.out.print("Melhor Vizinho => ");
+        //melhorVizinho = swap(melhorVizinhoc, melhorVizinhok, s);
+        //System.out.println("Melhor Vizinho => ");
         //escreverArray(melhorVizinho);
         //System.out.println("Solucao inicial => ");
         //escreverArray(this.solucaoConstruida);
@@ -77,25 +86,33 @@ public class VND {
     }
     
     private int[] explorarDoisOpt(int[] s){
-        int[] melhorVizinho = new int[s.length];
+        int[] melhorVizinho = s;
         int[] sAux;
-        double melhorSolucao = Double.MAX_VALUE;
+        double melhorSolucao = valorSolucao(s);
+        double solucaoTemp;
+        int melhorVizinhoc = 0;
+        int melhorVizinhok = 0;
         
         for (int c = 0; c < s.length; ++c){
             for (int k = c+1; k < s.length; ++k){
+                //solucaoTemp = doisOptVirtual(c, k, s);
                 sAux = doisOpt(c, k, s);
                 //System.out.print("Vizinho => ");
                 //escreverArray(sAux);
                 //System.out.println(" => " + valorSolucao(sAux));
                 if (valorSolucao(sAux) < melhorSolucao){
+                    //melhorSolucao = solucaoTemp;
+                    //melhorVizinhoc = c;
+                    //melhorVizinhok = k;
                     melhorSolucao = valorSolucao(sAux);
                     melhorVizinho = sAux;
                 }
             }
         }
-        //System.out.print("Melhor Vizinho => ");
+        //melhorVizinho = doisOpt(melhorVizinhoc, melhorVizinhok, s);
+        //System.out.println("Melhor Vizinho => ");
         //escreverArray(melhorVizinho);
-        //System.out.print("Solucao inicial => ");
+        //System.out.println("Solucao inicial => ");
         //escreverArray(this.solucaoConstruida);
         return melhorVizinho;
     }
@@ -143,5 +160,50 @@ public class VND {
         for (int i = 0; i < a.length; ++i){
             System.out.print(a[i] + " ");
         }
+    }
+    
+    private double swapVirtual(int c, int k, int[] s){
+        double solucaoTemp;
+        double valorSolucaoInicial = valorSolucao(s);
+        //System.out.println(G.getAresta(s[c], s[k-1]).getPeso());
+        if ((c == 0) && (k == G.getnVertices()-1)){
+            solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k-1]).getPeso()) + (G.getAresta(s[k], s[c+1]).getPeso())) 
+                    - ((G.getAresta(s[c], s[c+1]).getPeso()) + (G.getAresta(s[k], s[k-1]).getPeso()));
+        }else{
+            if (c == 0){
+                solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k+1]).getPeso()) + (G.getAresta(s[c], s[k-1]).getPeso()) + (G.getAresta(s[k], s[c+1]).getPeso())) 
+                        - ((G.getAresta(s[c], s[c+1]).getPeso()) + (G.getAresta(s[k], s[k+1]).getPeso()) + (G.getAresta(s[k], s[k-1]).getPeso()));
+            }else{
+                if (k == G.getnVertices()-1){
+                    solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k-1]).getPeso()) + (G.getAresta(s[k], s[c+1]).getPeso()) + (G.getAresta(s[k], s[c-1]).getPeso())) 
+                            - ((G.getAresta(s[c], s[c-1]).getPeso()) + (G.getAresta(s[c], s[c+1]).getPeso()) + (G.getAresta(s[k], s[k-1]).getPeso()));
+                }else{
+                    solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k+1]).getPeso()) + (G.getAresta(s[c], s[k-1]).getPeso()) + (G.getAresta(s[k], s[c+1]).getPeso()) + (G.getAresta(s[k], s[c-1]).getPeso())) 
+                            - ((G.getAresta(s[c], s[c+1]).getPeso()) + (G.getAresta(s[c], s[c-1]).getPeso()) + (G.getAresta(s[k], s[k+1]).getPeso()) + (G.getAresta(s[k], s[k-1]).getPeso()));
+                }
+            }
+        }
+        return solucaoTemp;
+    }
+    
+    private double doisOptVirtual(int c, int k, int[] s){
+        double solucaoTemp;
+        double valorSolucaoInicial = valorSolucao(s);
+        //System.out.println(G.getAresta(s[c], s[k-1]).getPeso());
+        if ((c == 0) && (k == G.getnVertices()-1)){
+            solucaoTemp = valorSolucaoInicial;
+        }else{
+            if (c == 0){
+                solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k+1]).getPeso())) - ((G.getAresta(s[k], s[k+1]).getPeso()));
+            }else{
+                if (k == G.getnVertices()-1){
+                    solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[k], s[c-1]).getPeso())) - ((G.getAresta(s[c], s[c-1]).getPeso()));
+                }else{
+                    solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k+1]).getPeso()) + (G.getAresta(s[k], s[c-1]).getPeso())) 
+                            - ((G.getAresta(s[c], s[c-1]).getPeso()) + (G.getAresta(s[k], s[k+1]).getPeso()));
+                }
+            }
+        }
+        return solucaoTemp;
     }
 }
