@@ -1,4 +1,4 @@
-
+﻿
 package grasp;
 
 import java.util.Arrays;
@@ -63,15 +63,12 @@ public class VND {
         
         for (int c = 0; c < s.length; ++c){
             for (int k = c+1; k < s.length; ++k){
-                //solucaoTemp = swapVirtual(c, k, s);
                 sAux = swap(c, k, s);
                 //System.out.print("Vizinho => ");
                 //escreverArray(sAux);
                 //System.out.println(" => " + valorSolucao(sAux));
                 if (valorSolucao(sAux) < melhorSolucao){
-                    //melhorSolucao = solucaoTemp;
-                    //melhorVizinhoc = c;
-                    //melhorVizinhok = k;
+
                     melhorSolucao = valorSolucao(sAux);
                     melhorVizinho = sAux;
                 }
@@ -95,15 +92,11 @@ public class VND {
         
         for (int c = 0; c < s.length; ++c){
             for (int k = c+1; k < s.length; ++k){
-                //solucaoTemp = doisOptVirtual(c, k, s);
                 sAux = doisOpt(c, k, s);
                 //System.out.print("Vizinho => ");
                 //escreverArray(sAux);
                 //System.out.println(" => " + valorSolucao(sAux));
                 if (valorSolucao(sAux) < melhorSolucao){
-                    //melhorSolucao = solucaoTemp;
-                    //melhorVizinhoc = c;
-                    //melhorVizinhok = k;
                     melhorSolucao = valorSolucao(sAux);
                     melhorVizinho = sAux;
                 }
@@ -160,50 +153,5 @@ public class VND {
         for (int i = 0; i < a.length; ++i){
             System.out.print(a[i] + " ");
         }
-    }
-    
-    private double swapVirtual(int c, int k, int[] s){
-        double solucaoTemp;
-        double valorSolucaoInicial = valorSolucao(s);
-        //System.out.println(G.getAresta(s[c], s[k-1]).getPeso());
-        if ((c == 0) && (k == G.getnVertices()-1)){
-            solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k-1]).getPeso()) + (G.getAresta(s[k], s[c+1]).getPeso())) 
-                    - ((G.getAresta(s[c], s[c+1]).getPeso()) + (G.getAresta(s[k], s[k-1]).getPeso()));
-        }else{
-            if (c == 0){
-                solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k+1]).getPeso()) + (G.getAresta(s[c], s[k-1]).getPeso()) + (G.getAresta(s[k], s[c+1]).getPeso())) 
-                        - ((G.getAresta(s[c], s[c+1]).getPeso()) + (G.getAresta(s[k], s[k+1]).getPeso()) + (G.getAresta(s[k], s[k-1]).getPeso()));
-            }else{
-                if (k == G.getnVertices()-1){
-                    solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k-1]).getPeso()) + (G.getAresta(s[k], s[c+1]).getPeso()) + (G.getAresta(s[k], s[c-1]).getPeso())) 
-                            - ((G.getAresta(s[c], s[c-1]).getPeso()) + (G.getAresta(s[c], s[c+1]).getPeso()) + (G.getAresta(s[k], s[k-1]).getPeso()));
-                }else{
-                    solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k+1]).getPeso()) + (G.getAresta(s[c], s[k-1]).getPeso()) + (G.getAresta(s[k], s[c+1]).getPeso()) + (G.getAresta(s[k], s[c-1]).getPeso())) 
-                            - ((G.getAresta(s[c], s[c+1]).getPeso()) + (G.getAresta(s[c], s[c-1]).getPeso()) + (G.getAresta(s[k], s[k+1]).getPeso()) + (G.getAresta(s[k], s[k-1]).getPeso()));
-                }
-            }
-        }
-        return solucaoTemp;
-    }
-    
-    private double doisOptVirtual(int c, int k, int[] s){
-        double solucaoTemp;
-        double valorSolucaoInicial = valorSolucao(s);
-        //System.out.println(G.getAresta(s[c], s[k-1]).getPeso());
-        if ((c == 0) && (k == G.getnVertices()-1)){
-            solucaoTemp = valorSolucaoInicial;
-        }else{
-            if (c == 0){
-                solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k+1]).getPeso())) - ((G.getAresta(s[k], s[k+1]).getPeso()));
-            }else{
-                if (k == G.getnVertices()-1){
-                    solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[k], s[c-1]).getPeso())) - ((G.getAresta(s[c], s[c-1]).getPeso()));
-                }else{
-                    solucaoTemp = valorSolucaoInicial + ((G.getAresta(s[c], s[k+1]).getPeso()) + (G.getAresta(s[k], s[c-1]).getPeso())) 
-                            - ((G.getAresta(s[c], s[c-1]).getPeso()) + (G.getAresta(s[k], s[k+1]).getPeso()));
-                }
-            }
-        }
-        return solucaoTemp;
     }
 }
